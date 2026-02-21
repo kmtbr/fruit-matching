@@ -132,10 +132,16 @@ const Game = (() => {
   function resetHintTimer() {
     clearTimeout(hintTimer);
     if (onHint) onHint(null); // 現在のヒントをクリア
-    hintTimer = setTimeout(() => {
-      if (isProcessing) return;
+    hintTimer = setTimeout(function showHintTick() {
+      if (isProcessing) {
+        // 処理中なら少し待ってリトライ
+        hintTimer = setTimeout(showHintTick, 1000);
+        return;
+      }
       const hint = findHint();
       if (hint && onHint) onHint(hint);
+      // 表示後も定期的に更新（別のペアに切り替わる可能性）
+      hintTimer = setTimeout(showHintTick, HINT_DELAY);
     }, HINT_DELAY);
   }
 
