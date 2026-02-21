@@ -30,8 +30,8 @@ const Game = (() => {
   let timerInterval = null;
   let isProcessing = false;
   let chainCount = 0;
-  let hintTimer = null;
-  const HINT_DELAY = 3000; // 3秒操作がなければヒント表示
+  let hintInterval = null;
+  const HINT_DELAY = 5000; // 5秒操作がなければヒント表示
 
   // コールバック
   let onScoreUpdate = null;
@@ -123,29 +123,21 @@ const Game = (() => {
 
   function stopTimer() {
     clearInterval(timerInterval);
-    clearTimeout(hintTimer);
+    clearInterval(hintInterval);
   }
 
   // ----------------------------------------
   // ヒント機能
   // ----------------------------------------
   function resetHintTimer() {
-    clearTimeout(hintTimer);
-    if (onHint) onHint(null); // 現在のヒントをクリア
-    hintTimer = setTimeout(function showHintTick() {
-      if (isProcessing) {
-        hintTimer = setTimeout(showHintTick, 1000);
-        return;
-      }
+    clearInterval(hintInterval);
+    if (onHint) onHint(null);
+    hintInterval = setInterval(() => {
+      if (isProcessing) return;
       const hint = findHint();
       if (hint && onHint) {
-        // 一度消してから再表示（アニメーションをリスタート）
-        onHint(null);
-        setTimeout(() => {
-          if (onHint) onHint(hint);
-        }, 50);
+        onHint(hint);
       }
-      hintTimer = setTimeout(showHintTick, HINT_DELAY);
     }, HINT_DELAY);
   }
 
@@ -191,7 +183,8 @@ const Game = (() => {
 
     isProcessing = true;
     chainCount = 0;
-    clearTimeout(hintTimer);
+    clearInterval(hintInterval);
+    hintInterval = null;
     if (onHint) onHint(null);
 
     // 入れ替え実行
@@ -209,7 +202,7 @@ const Game = (() => {
       swap(row1, col1, row2, col2);
       AudioManager.playInvalidSwap();
       if (onBoardUpdate) onBoardUpdate(board, 'invalid-swap', { row1, col1, row2, col2 });
-      setTimeout(() => { isProcessing = false; }, 500);
+      setTimeout(() => { isProcessing = false; resetHintTimer(); }, 500);
       return false;
     }
   }

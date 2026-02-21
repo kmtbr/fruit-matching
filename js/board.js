@@ -48,7 +48,12 @@ const Board = (() => {
       for (let col = 0; col < BOARD_SIZE; col++) {
         const cell = document.createElement('div');
         cell.className = 'cell';
-        if (animate) cell.classList.add('dropping');
+        if (animate) {
+          cell.classList.add('dropping');
+          cell.addEventListener('animationend', () => {
+            cell.classList.remove('dropping');
+          }, { once: true });
+        }
         cell.dataset.row = row;
         cell.dataset.col = col;
 
