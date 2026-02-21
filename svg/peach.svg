@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <radialGradient id="peach-grad" cx="45%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#ffc8a8"/>
+      <stop offset="60%" stop-color="#ff9a76"/>
+      <stop offset="100%" stop-color="#e17055"/>
+    </radialGradient>
+  </defs>
+  <!-- もも本体 -->
+  <path d="M50 85 Q30 85 22 65 Q14 45 22 30 Q30 18 42 18 Q48 18 50 24 Q52 18 58 18 Q70 18 78 30 Q86 45 78 65 Q70 85 50 85Z"
+        fill="url(#peach-grad)"/>
+  <!-- 割れ目 -->
+  <path d="M50 24 Q48 45 50 80" stroke="#d35400" stroke-width="1.5" fill="none" opacity="0.3"/>
+  <!-- 茎 -->
+  <path d="M50 22 Q52 12 48 6" stroke="#8B5E3C" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- 葉っぱ -->
+  <path d="M50 14 Q60 6 66 12 Q60 16 50 14Z" fill="#27ae60"/>
+  <!-- ハイライト -->
+  <ellipse cx="38" cy="42" rx="10" ry="14" fill="white" opacity="0.25" transform="rotate(-15 38 42)"/>
+  <!-- ほっぺ（かわいさ追加） -->
+  <circle cx="36" cy="60" r="6" fill="#ff7675" opacity="0.25"/>
+  <circle cx="64" cy="60" r="6" fill="#ff7675" opacity="0.25"/>
+</svg>

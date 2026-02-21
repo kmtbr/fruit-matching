@@ -3,29 +3,35 @@
 // ========================================
 
 const BOARD_SIZE = 6;
-const FRUIT_TYPES = ['apple', 'banana', 'grape', 'orange'];
-const FRUIT_SVGS = {
-  apple: 'svg/apple.svg',
-  banana: 'svg/banana.svg',
-  grape: 'svg/grape.svg',
-  orange: 'svg/orange.svg',
+const ALL_FRUIT_TYPES = ['apple', 'banana', 'grape', 'orange', 'pineapple', 'melon', 'peach'];
+const FRUIT_IMAGES = {
+  apple: 'img/apple.png',
+  banana: 'img/banana.png',
+  grape: 'img/grape.png',
+  orange: 'img/orange.png',
+  pineapple: 'img/pineapple.png',
+  melon: 'img/melon.png',
+  peach: 'img/peach.png',
 };
 
 const SCORE_TABLE = {
   3: 100,
-  4: 200,
+  4: 250,
   5: 500,
-  6: 500, // 6個以上も500点
+  6: 500,
 };
 
 const Game = (() => {
   let board = [];       // 2次元配列 [row][col]
   let score = 0;
   let currentLevel = null;
+  let activeFruits = []; // 現在のレベルで使用するフルーツ
   let timeRemaining = 0;
   let timerInterval = null;
   let isProcessing = false;
   let chainCount = 0;
+  let hintTimer = null;
+  const HINT_DELAY = 5000; // 5秒操作がなければヒント表示
 
   // コールバック
   let onScoreUpdate = null;
@@ -36,6 +42,7 @@ const Game = (() => {
   let onGameClear = null;
   let onGameOver = null;
   let onNoMoves = null;
+  let onHint = null;
 
   // ----------------------------------------
   // 盤面の初期化
@@ -52,7 +59,7 @@ const Game = (() => {
 
   // 初期配置で3マッチが生じないようにランダム選択
   function randomFruit(row, col) {
-    const available = [...FRUIT_TYPES];
+    const available = [...activeFruits];
     // 左2つが同じなら除外
     if (col >= 2 && board[row][col - 1] === board[row][col - 2]) {
       const exclude = board[row][col - 1];
@@ -69,7 +76,7 @@ const Game = (() => {
   }
 
   function randomFruitSimple() {
-    return FRUIT_TYPES[Math.floor(Math.random() * FRUIT_TYPES.length)];
+    return activeFruits[Math.floor(Math.random() * activeFruits.length)];
   }
 
   // ----------------------------------------
@@ -82,6 +89,10 @@ const Game = (() => {
     isProcessing = false;
     chainCount = 0;
 
+    // レベルに応じたフルーツ種類を設定
+    const fruitCount = currentLevel.fruitCount || 4;
+    activeFruits = ALL_FRUIT_TYPES.slice(0, fruitCount);
+
     initBoard();
 
     if (onScoreUpdate) onScoreUpdate(score);
@@ -89,6 +100,7 @@ const Game = (() => {
     if (onBoardUpdate) onBoardUpdate(board, 'init');
 
     startTimer();
+    resetHintTimer();
   }
 
   function startTimer() {
@@ -103,7 +115,6 @@ const Game = (() => {
 
       if (timeRemaining <= 0) {
         clearInterval(timerInterval);
-        // ゲームオーバー
         if (onGameOver) onGameOver(score, currentLevel.targetScore);
         AudioManager.playGameOver();
       }
@@ -112,6 +123,46 @@ const Game = (() => {
 
   function stopTimer() {
     clearInterval(timerInterval);
+    clearTimeout(hintTimer);
+  }
+
+  // ----------------------------------------
+  // ヒント機能
+  // ----------------------------------------
+  function resetHintTimer() {
+    clearTimeout(hintTimer);
+    if (onHint) onHint(null); // 現在のヒントをクリア
+    hintTimer = setTimeout(() => {
+      if (isProcessing) return;
+      const hint = findHint();
+      if (hint && onHint) onHint(hint);
+    }, HINT_DELAY);
+  }
+
+  function findHint() {
+    for (let row = 0; row < BOARD_SIZE; row++) {
+      for (let col = 0; col < BOARD_SIZE; col++) {
+        // 右と入れ替え
+        if (col < BOARD_SIZE - 1) {
+          swap(row, col, row, col + 1);
+          if (findAllMatches().size > 0) {
+            swap(row, col, row, col + 1);
+            return { row1: row, col1: col, row2: row, col2: col + 1 };
+          }
+          swap(row, col, row, col + 1);
+        }
+        // 下と入れ替え
+        if (row < BOARD_SIZE - 1) {
+          swap(row, col, row + 1, col);
+          if (findAllMatches().size > 0) {
+            swap(row, col, row + 1, col);
+            return { row1: row, col1: col, row2: row + 1, col2: col };
+          }
+          swap(row, col, row + 1, col);
+        }
+      }
+    }
+    return null;
   }
 
   // ----------------------------------------
@@ -130,6 +181,7 @@ const Game = (() => {
 
     isProcessing = true;
     chainCount = 0;
+    resetHintTimer();
 
     // 入れ替え実行
     swap(row1, col1, row2, col2);
@@ -139,7 +191,6 @@ const Game = (() => {
     if (matches.size > 0) {
       AudioManager.playSwap();
       if (onBoardUpdate) onBoardUpdate(board, 'swap', { row1, col1, row2, col2 });
-      // マッチ処理を少し遅延させてアニメーションを見せる
       setTimeout(() => processMatches(matches), 300);
       return true;
     } else {
@@ -147,7 +198,7 @@ const Game = (() => {
       swap(row1, col1, row2, col2);
       AudioManager.playInvalidSwap();
       if (onBoardUpdate) onBoardUpdate(board, 'invalid-swap', { row1, col1, row2, col2 });
-      setTimeout(() => { isProcessing = false; }, 400);
+      setTimeout(() => { isProcessing = false; }, 500);
       return false;
     }
   }
@@ -211,13 +262,12 @@ const Game = (() => {
   function processMatches(matches) {
     chainCount++;
 
-    // マッチしたグループごとにスコア計算
     const groups = groupMatches(matches);
     let earnedScore = 0;
     groups.forEach(group => {
       const count = group.length;
       const baseScore = SCORE_TABLE[Math.min(count, 6)] || SCORE_TABLE[6];
-      earnedScore += baseScore * chainCount; // 連鎖ボーナス
+      earnedScore += baseScore * chainCount;
     });
 
     score += earnedScore;
@@ -238,7 +288,7 @@ const Game = (() => {
 
     if (onBoardUpdate) onBoardUpdate(board, 'match', { matches });
 
-    // 落下処理（少し遅延）
+    // 落下処理
     setTimeout(() => {
       dropAndFill();
 
@@ -250,7 +300,6 @@ const Game = (() => {
         if (newMatches.size > 0) {
           processMatches(newMatches);
         } else {
-          // 連鎖終了
           isProcessing = false;
           checkClearCondition();
           checkForValidMoves();
@@ -259,7 +308,6 @@ const Game = (() => {
     }, 400);
   }
 
-  // マッチしたセルをグループ化（連続したセルごと）
   function groupMatches(matches) {
     const groups = [];
     const visited = new Set();
@@ -276,7 +324,6 @@ const Game = (() => {
         visited.add(current);
         group.push(current);
         const [r, c] = current.split(',').map(Number);
-        // 隣接セルをチェック
         const neighbors = [`${r - 1},${c}`, `${r + 1},${c}`, `${r},${c - 1}`, `${r},${c + 1}`];
         neighbors.forEach(n => {
           if (matches.has(n) && !visited.has(n)) stack.push(n);
@@ -293,7 +340,6 @@ const Game = (() => {
   // ----------------------------------------
   function dropAndFill() {
     for (let col = 0; col < BOARD_SIZE; col++) {
-      // 下から上へ走査、空セルを詰める
       let emptyRow = BOARD_SIZE - 1;
       for (let row = BOARD_SIZE - 1; row >= 0; row--) {
         if (board[row][col] !== null) {
@@ -304,7 +350,6 @@ const Game = (() => {
           emptyRow--;
         }
       }
-      // 上部の空セルに新しいフルーツを補充
       for (let row = emptyRow; row >= 0; row--) {
         board[row][col] = randomFruitSimple();
       }
@@ -330,7 +375,6 @@ const Game = (() => {
   function checkForValidMoves() {
     if (hasValidMoves()) return;
 
-    // 有効な手がない場合、盤面をシャッフル
     if (onNoMoves) onNoMoves();
     shuffleBoard();
     if (onBoardUpdate) onBoardUpdate(board, 'shuffle');
@@ -339,7 +383,6 @@ const Game = (() => {
   function hasValidMoves() {
     for (let row = 0; row < BOARD_SIZE; row++) {
       for (let col = 0; col < BOARD_SIZE; col++) {
-        // 右との交換
         if (col < BOARD_SIZE - 1) {
           swap(row, col, row, col + 1);
           if (findAllMatches().size > 0) {
@@ -348,7 +391,6 @@ const Game = (() => {
           }
           swap(row, col, row, col + 1);
         }
-        // 下との交換
         if (row < BOARD_SIZE - 1) {
           swap(row, col, row + 1, col);
           if (findAllMatches().size > 0) {
@@ -363,7 +405,6 @@ const Game = (() => {
   }
 
   function shuffleBoard() {
-    // Fisher-Yates シャッフル
     const flat = [];
     for (let row = 0; row < BOARD_SIZE; row++) {
       for (let col = 0; col < BOARD_SIZE; col++) {
@@ -381,7 +422,6 @@ const Game = (() => {
       }
     }
 
-    // シャッフル後もマッチがあれば消す（初期状態を安定させる）
     const matches = findAllMatches();
     if (matches.size > 0) {
       matches.forEach(key => {
@@ -390,7 +430,6 @@ const Game = (() => {
       });
     }
 
-    // まだ有効手がなければ再シャッフル
     if (!hasValidMoves()) {
       shuffleBoard();
     }
@@ -417,6 +456,7 @@ const Game = (() => {
       case 'gameClear': onGameClear = callback; break;
       case 'gameOver': onGameOver = callback; break;
       case 'noMoves': onNoMoves = callback; break;
+      case 'hint': onHint = callback; break;
     }
   }
 

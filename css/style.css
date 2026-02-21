@@ -21,8 +21,12 @@ html, body {
 }
 
 body {
-  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+  font-family: "Zen Maru Gothic", "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
   background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  background-image: url('../img/bg-game.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -56,11 +60,15 @@ body {
    ======================================== */
 .title-container {
   text-align: center;
-  padding: 20px;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 30px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .game-title {
-  font-size: 56px;
+  font-size: 64px;
   font-weight: 900;
   color: #e74c3c;
   text-shadow: 3px 3px 0 #c0392b, 6px 6px 0 rgba(0, 0, 0, 0.1);
@@ -71,19 +79,24 @@ body {
 .title-fruits {
   display: flex;
   justify-content: center;
-  gap: 16px;
+  flex-wrap: wrap;
+  gap: 14px;
   margin-bottom: 40px;
+  max-width: 600px;
 }
 
 .title-fruit {
-  width: 64px;
-  height: 64px;
+  width: 68px;
+  height: 68px;
   animation: float 2s ease-in-out infinite;
 }
 
-.title-fruit:nth-child(2) { animation-delay: 0.3s; }
-.title-fruit:nth-child(3) { animation-delay: 0.6s; }
-.title-fruit:nth-child(4) { animation-delay: 0.9s; }
+.title-fruit:nth-child(2) { animation-delay: 0.2s; }
+.title-fruit:nth-child(3) { animation-delay: 0.4s; }
+.title-fruit:nth-child(4) { animation-delay: 0.6s; }
+.title-fruit:nth-child(5) { animation-delay: 0.8s; }
+.title-fruit:nth-child(6) { animation-delay: 1.0s; }
+.title-fruit:nth-child(7) { animation-delay: 1.2s; }
 
 @keyframes float {
   0%, 100% { transform: translateY(0); }
@@ -104,13 +117,13 @@ body {
    ======================================== */
 .btn {
   display: block;
-  width: 260px;
-  margin: 12px auto;
-  padding: 18px 32px;
-  font-size: 28px;
+  width: 300px;
+  margin: 14px auto;
+  padding: 20px 36px;
+  font-size: 32px;
   font-weight: 700;
   border: none;
-  border-radius: 16px;
+  border-radius: 18px;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   -webkit-tap-highlight-color: transparent;
@@ -135,7 +148,7 @@ body {
   background: linear-gradient(180deg, #a8e6cf, #88d8b0);
   color: #2d6a4f;
   box-shadow: 0 6px 0 #6bbd99, 0 8px 20px rgba(0, 0, 0, 0.1);
-  font-size: 22px;
+  font-size: 24px;
 }
 
 .btn-secondary:active {
@@ -148,11 +161,15 @@ body {
    ======================================== */
 .levels-container {
   text-align: center;
-  padding: 20px;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 30px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .screen-heading {
-  font-size: 36px;
+  font-size: 40px;
   font-weight: 800;
   color: #e74c3c;
   margin-bottom: 30px;
@@ -160,11 +177,11 @@ body {
 }
 
 .level-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: 16px;
   margin-bottom: 30px;
+  max-width: 600px;
 }
 
 .level-btn {
@@ -211,12 +228,18 @@ body {
 #screen-game {
   flex-direction: column;
   padding: 10px;
+  gap: 8px;
 }
 
 .game-header {
   width: 100%;
-  max-width: 420px;
-  margin-bottom: 10px;
+  max-width: 600px;
+  margin-bottom: 4px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 16px;
+  padding: 8px 12px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .game-info {
@@ -232,23 +255,23 @@ body {
 
 .info-label {
   display: block;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #8b6914;
 }
 
 .info-value {
   display: block;
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 800;
   color: #e74c3c;
 }
 
 .timer-bar-container {
   width: 100%;
-  height: 12px;
+  height: 14px;
   background: rgba(255, 255, 255, 0.5);
-  border-radius: 6px;
+  border-radius: 7px;
   overflow: hidden;
 }
 
@@ -256,7 +279,7 @@ body {
   width: 100%;
   height: 100%;
   background: linear-gradient(90deg, #2ecc71, #27ae60);
-  border-radius: 6px;
+  border-radius: 7px;
   transition: width 1s linear;
 }
 
@@ -275,39 +298,41 @@ body {
 }
 
 /* ========================================
-   ゲーム盤面
+   ゲーム盤面 - iPad全体に広がるサイズ
    ======================================== */
 .board-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex: 1;
 }
 
 .game-board {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: repeat(6, 1fr);
-  gap: 4px;
-  width: min(400px, calc(100vw - 40px), calc(100vh - 200px));
-  height: min(400px, calc(100vw - 40px), calc(100vh - 200px));
+  gap: 5px;
+  width: min(600px, calc(100vw - 24px), calc(100vh - 160px));
+  height: min(600px, calc(100vw - 24px), calc(100vh - 160px));
   background: rgba(255, 255, 255, 0.3);
-  border-radius: 16px;
-  padding: 8px;
+  border-radius: 20px;
+  padding: 10px;
 }
 
 .cell {
   position: relative;
-  border-radius: 10px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  overflow: visible;
+  transition: background 0.15s ease;
 }
 
 .cell img {
-  width: 80%;
-  height: 80%;
+  width: 82%;
+  height: 82%;
   object-fit: contain;
   transition: transform 0.15s ease;
   pointer-events: none;
@@ -315,7 +340,15 @@ body {
 
 .cell.selected {
   background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 0 0 3px #e74c3c;
+  box-shadow: 0 0 0 3px #e74c3c, 0 0 12px rgba(231, 76, 60, 0.4);
+}
+
+.cell.selected img {
+  transform: scale(1.1);
+}
+
+.cell.dragging-source {
+  opacity: 0.4;
 }
 
 .cell.hint {
@@ -328,29 +361,40 @@ body {
 }
 
 /* ========================================
-   盤面アニメーション
+   ドラッグゴースト（指に追従するフルーツ）
    ======================================== */
-.cell.swapping {
-  z-index: 10;
+.drag-ghost {
+  position: fixed;
+  width: 80px;
+  height: 80px;
+  pointer-events: none;
+  z-index: 1000;
+  transform: translate(-50%, -50%) scale(1.2);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  opacity: 0.9;
+  transition: none;
 }
 
+/* ========================================
+   盤面アニメーション
+   ======================================== */
 .cell.matched {
   animation: match-pop 0.4s ease forwards;
 }
 
 @keyframes match-pop {
   0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.3); opacity: 0.8; }
+  30% { transform: scale(1.3); opacity: 1; }
+  60% { transform: scale(1.4) rotate(10deg); opacity: 0.6; }
   100% { transform: scale(0); opacity: 0; }
 }
 
 .cell.dropping {
-  animation: drop-in 0.3s ease-out;
+  animation: drop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @keyframes drop-in {
-  0% { transform: translateY(-100%); opacity: 0; }
-  60% { transform: translateY(10%); opacity: 1; }
+  0% { transform: translateY(-120%); opacity: 0; }
   100% { transform: translateY(0); opacity: 1; }
 }
 
@@ -367,18 +411,19 @@ body {
 /* スコアポップアップ */
 .score-popup {
   position: absolute;
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 800;
   color: #e74c3c;
-  text-shadow: 1px 1px 0 white;
+  text-shadow: 2px 2px 0 white, -1px -1px 0 white;
   pointer-events: none;
-  animation: score-float 0.8s ease-out forwards;
+  animation: score-float 1s ease-out forwards;
   z-index: 100;
 }
 
 @keyframes score-float {
   0% { transform: translateY(0) scale(0.5); opacity: 1; }
-  100% { transform: translateY(-60px) scale(1.2); opacity: 0; }
+  50% { transform: translateY(-30px) scale(1.3); opacity: 1; }
+  100% { transform: translateY(-70px) scale(1); opacity: 0; }
 }
 
 /* コンボテキスト */
@@ -387,18 +432,19 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0);
-  font-size: 48px;
+  font-size: 56px;
   font-weight: 900;
   color: #f39c12;
-  text-shadow: 3px 3px 0 #e67e22;
+  text-shadow: 3px 3px 0 #e67e22, -2px -2px 0 white;
   pointer-events: none;
-  animation: combo-pop 0.6s ease forwards;
+  animation: combo-pop 0.7s ease forwards;
   z-index: 200;
 }
 
 @keyframes combo-pop {
   0% { transform: translate(-50%, -50%) scale(0) rotate(-10deg); opacity: 1; }
-  50% { transform: translate(-50%, -50%) scale(1.3) rotate(5deg); opacity: 1; }
+  40% { transform: translate(-50%, -50%) scale(1.4) rotate(5deg); opacity: 1; }
+  70% { transform: translate(-50%, -50%) scale(1.1) rotate(0deg); opacity: 1; }
   100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 0; }
 }
 
@@ -407,11 +453,15 @@ body {
    ======================================== */
 .result-container {
   text-align: center;
-  padding: 20px;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 30px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .result-title {
-  font-size: 52px;
+  font-size: 60px;
   font-weight: 900;
   margin-bottom: 20px;
   line-height: 1.2;
@@ -429,39 +479,39 @@ body {
 }
 
 .allclear-title {
-  font-size: 44px;
+  font-size: 52px;
   color: #e74c3c;
   text-shadow: 3px 3px 0 #c0392b, 6px 6px 0 rgba(0, 0, 0, 0.1);
 }
 
 .result-score {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .result-score-label {
   display: block;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
   color: #8b6914;
 }
 
 .result-score-value {
   display: block;
-  font-size: 56px;
+  font-size: 64px;
   font-weight: 900;
   color: #e74c3c;
 }
 
 .result-stars {
-  font-size: 48px;
-  margin-bottom: 24px;
-  letter-spacing: 8px;
+  font-size: 56px;
+  margin-bottom: 28px;
+  letter-spacing: 10px;
 }
 
 .result-target {
-  font-size: 20px;
+  font-size: 22px;
   color: #8b6914;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 /* ========================================
@@ -469,8 +519,8 @@ body {
    ======================================== */
 .particle {
   position: fixed;
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   pointer-events: none;
   z-index: 150;

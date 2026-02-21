@@ -18,8 +18,13 @@ const App = (() => {
       const saved = localStorage.getItem('fruitMatchProgress');
       if (saved) {
         const data = JSON.parse(saved);
-        if (data.levelState) {
+        if (data.levelState && data.levelState.length >= LEVELS.length) {
           levelState = data.levelState;
+        } else if (data.levelState) {
+          // レベル数が増えた場合に対応
+          data.levelState.forEach((s, i) => {
+            if (i < levelState.length) levelState[i] = s;
+          });
         }
       }
     } catch (e) {
@@ -203,6 +208,10 @@ const App = (() => {
 
   Game.on('noMoves', () => {
     // シャッフル中の表示（短いので特に何もしなくてOK）
+  });
+
+  Game.on('hint', (hint) => {
+    Board.showHint(hint);
   });
 
   // ----------------------------------------
