@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <radialGradient id="grape-grad" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#a29bfe"/>
+      <stop offset="100%" stop-color="#6c5ce7"/>
+    </radialGradient>
+  </defs>
+  <!-- 茎 -->
+  <path d="M50 18 Q52 10 48 4" stroke="#8B5E3C" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- 葉っぱ -->
+  <path d="M50 14 Q60 6 66 12 Q60 16 50 14Z" fill="#27ae60"/>
+  <!-- ぶどうの粒 上段 -->
+  <circle cx="40" cy="30" r="12" fill="url(#grape-grad)"/>
+  <circle cx="60" cy="30" r="12" fill="url(#grape-grad)"/>
+  <!-- 中段 -->
+  <circle cx="30" cy="50" r="12" fill="url(#grape-grad)"/>
+  <circle cx="50" cy="48" r="12" fill="url(#grape-grad)"/>
+  <circle cx="70" cy="50" r="12" fill="url(#grape-grad)"/>
+  <!-- 下段 -->
+  <circle cx="38" cy="68" r="12" fill="url(#grape-grad)"/>
+  <circle cx="62" cy="68" r="12" fill="url(#grape-grad)"/>
+  <!-- 最下段 -->
+  <circle cx="50" cy="84" r="12" fill="url(#grape-grad)"/>
+  <!-- ハイライト -->
+  <circle cx="36" cy="26" r="4" fill="white" opacity="0.3"/>
+  <circle cx="56" cy="26" r="4" fill="white" opacity="0.3"/>
+  <circle cx="26" cy="46" r="4" fill="white" opacity="0.3"/>
+  <circle cx="46" cy="44" r="4" fill="white" opacity="0.3"/>
+  <circle cx="66" cy="46" r="4" fill="white" opacity="0.3"/>
+  <circle cx="34" cy="64" r="4" fill="white" opacity="0.3"/>
+  <circle cx="58" cy="64" r="4" fill="white" opacity="0.3"/>
+  <circle cx="46" cy="80" r="4" fill="white" opacity="0.3"/>
+</svg>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>フルーツマッチング</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- タイトル画面 -->
+  <div id="screen-title" class="screen active">
+    <div class="title-container">
+      <h1 class="game-title">フルーツ<br>マッチング</h1>
+      <div class="title-fruits">
+        <img src="svg/apple.svg" alt="りんご" class="title-fruit">
+        <img src="svg/banana.svg" alt="バナナ" class="title-fruit">
+        <img src="svg/grape.svg" alt="ぶどう" class="title-fruit">
+        <img src="svg/orange.svg" alt="オレンジ" class="title-fruit">
+      </div>
+      <button id="btn-play" class="btn btn-primary">あそぶ</button>
+    </div>
+  </div>
+
+  <!-- レベル選択画面 -->
+  <div id="screen-levels" class="screen">
+    <div class="levels-container">
+      <h2 class="screen-heading">レベルをえらぼう</h2>
+      <div class="level-buttons" id="level-buttons">
+        <!-- JSで動的に生成 -->
+      </div>
+      <button id="btn-back-title" class="btn btn-secondary">もどる</button>
+    </div>
+  </div>
+
+  <!-- ゲーム画面 -->
+  <div id="screen-game" class="screen">
+    <div class="game-header">
+      <div class="game-info">
+        <div class="info-item">
+          <span class="info-label">レベル</span>
+          <span class="info-value" id="display-level">1</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">スコア</span>
+          <span class="info-value" id="display-score">0</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">もくひょう</span>
+          <span class="info-value" id="display-target">500</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">のこり</span>
+          <span class="info-value" id="display-time">90</span>
+        </div>
+      </div>
+      <div class="timer-bar-container">
+        <div class="timer-bar" id="timer-bar"></div>
+      </div>
+    </div>
+    <div class="board-wrapper">
+      <div id="game-board" class="game-board">
+        <!-- JSで動的に生成 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- クリア画面 -->
+  <div id="screen-clear" class="screen">
+    <div class="result-container">
+      <h2 class="result-title clear-title">クリア!</h2>
+      <div class="result-score">
+        <span class="result-score-label">スコア</span>
+        <span class="result-score-value" id="clear-score">0</span>
+      </div>
+      <div class="result-stars" id="clear-stars">
+        <!-- JSで動的に生成 -->
+      </div>
+      <button id="btn-next-level" class="btn btn-primary">つぎのレベル</button>
+      <button id="btn-clear-to-levels" class="btn btn-secondary">レベルせんたく</button>
+    </div>
+  </div>
+
+  <!-- ゲームオーバー画面 -->
+  <div id="screen-gameover" class="screen">
+    <div class="result-container">
+      <h2 class="result-title gameover-title">ざんねん...</h2>
+      <div class="result-score">
+        <span class="result-score-label">スコア</span>
+        <span class="result-score-value" id="gameover-score">0</span>
+      </div>
+      <div class="result-target">
+        <span>もくひょう: <span id="gameover-target">0</span>てん</span>
+      </div>
+      <button id="btn-retry" class="btn btn-primary">もういちど</button>
+      <button id="btn-gameover-to-levels" class="btn btn-secondary">レベルせんたく</button>
+    </div>
+  </div>
+
+  <!-- 全レベルクリア画面 -->
+  <div id="screen-allclear" class="screen">
+    <div class="result-container">
+      <h2 class="result-title allclear-title">すごい!<br>ぜんぶクリア!</h2>
+      <div class="title-fruits">
+        <img src="svg/apple.svg" alt="りんご" class="title-fruit bounce">
+        <img src="svg/banana.svg" alt="バナナ" class="title-fruit bounce">
+        <img src="svg/grape.svg" alt="ぶどう" class="title-fruit bounce">
+        <img src="svg/orange.svg" alt="オレンジ" class="title-fruit bounce">
+      </div>
+      <button id="btn-allclear-to-title" class="btn btn-primary">タイトルへ</button>
+    </div>
+  </div>
+
+  <script src="js/audio.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

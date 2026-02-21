@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <radialGradient id="orange-grad" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#ffa502"/>
+      <stop offset="100%" stop-color="#e67e22"/>
+    </radialGradient>
+  </defs>
+  <!-- オレンジ本体 -->
+  <circle cx="50" cy="54" r="36" fill="url(#orange-grad)"/>
+  <!-- へた部分 -->
+  <ellipse cx="50" cy="20" rx="6" ry="3" fill="#27ae60"/>
+  <path d="M50 22 Q51 16 49 12" stroke="#8B5E3C" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- 葉っぱ -->
+  <path d="M50 16 Q58 8 64 12 Q58 16 50 16Z" fill="#2ecc71"/>
+  <!-- テクスチャ（つぶつぶ感） -->
+  <circle cx="50" cy="54" r="36" fill="none" stroke="#d35400" stroke-width="0.5" opacity="0.2"/>
+  <!-- ハイライト -->
+  <ellipse cx="38" cy="42" rx="10" ry="14" fill="white" opacity="0.25" transform="rotate(-20 38 42)"/>
+  <!-- へそ -->
+  <circle cx="50" cy="86" r="4" fill="#d35400" opacity="0.4"/>
+</svg>

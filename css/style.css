@@ -1,0 +1,488 @@
+/* ========================================
+   フルーツマッチング - スタイルシート
+   ======================================== */
+
+/* リセット・基本設定 */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* ========================================
+   画面管理
+   ======================================== */
+.screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.screen.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ========================================
+   タイトル画面
+   ======================================== */
+.title-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.game-title {
+  font-size: 56px;
+  font-weight: 900;
+  color: #e74c3c;
+  text-shadow: 3px 3px 0 #c0392b, 6px 6px 0 rgba(0, 0, 0, 0.1);
+  line-height: 1.2;
+  margin-bottom: 30px;
+}
+
+.title-fruits {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.title-fruit {
+  width: 64px;
+  height: 64px;
+  animation: float 2s ease-in-out infinite;
+}
+
+.title-fruit:nth-child(2) { animation-delay: 0.3s; }
+.title-fruit:nth-child(3) { animation-delay: 0.6s; }
+.title-fruit:nth-child(4) { animation-delay: 0.9s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.1); }
+}
+
+.bounce {
+  animation: bounce 0.8s ease-in-out infinite;
+}
+
+/* ========================================
+   ボタン
+   ======================================== */
+.btn {
+  display: block;
+  width: 260px;
+  margin: 12px auto;
+  padding: 18px 32px;
+  font-size: 28px;
+  font-weight: 700;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #ff6b6b, #e74c3c);
+  color: white;
+  box-shadow: 0 6px 0 #c0392b, 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:active {
+  box-shadow: 0 2px 0 #c0392b, 0 4px 10px rgba(0, 0, 0, 0.15);
+  transform: translateY(4px) scale(0.98);
+}
+
+.btn-secondary {
+  background: linear-gradient(180deg, #a8e6cf, #88d8b0);
+  color: #2d6a4f;
+  box-shadow: 0 6px 0 #6bbd99, 0 8px 20px rgba(0, 0, 0, 0.1);
+  font-size: 22px;
+}
+
+.btn-secondary:active {
+  box-shadow: 0 2px 0 #6bbd99, 0 4px 10px rgba(0, 0, 0, 0.1);
+  transform: translateY(4px) scale(0.98);
+}
+
+/* ========================================
+   レベル選択画面
+   ======================================== */
+.levels-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.screen-heading {
+  font-size: 36px;
+  font-weight: 800;
+  color: #e74c3c;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+.level-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.level-btn {
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  border: none;
+  font-size: 36px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.level-btn:active {
+  transform: scale(0.92);
+}
+
+.level-btn.unlocked {
+  background: linear-gradient(180deg, #ffd93d, #f0c000);
+  color: #8b6914;
+  box-shadow: 0 6px 0 #c9a000, 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.level-btn.locked {
+  background: linear-gradient(180deg, #d5d5d5, #b0b0b0);
+  color: #888;
+  box-shadow: 0 6px 0 #999, 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.level-btn .level-stars {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+/* ========================================
+   ゲーム画面
+   ======================================== */
+#screen-game {
+  flex-direction: column;
+  padding: 10px;
+}
+
+.game-header {
+  width: 100%;
+  max-width: 420px;
+  margin-bottom: 10px;
+}
+
+.game-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.info-item {
+  text-align: center;
+  flex: 1;
+}
+
+.info-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #8b6914;
+}
+
+.info-value {
+  display: block;
+  font-size: 28px;
+  font-weight: 800;
+  color: #e74c3c;
+}
+
+.timer-bar-container {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.timer-bar {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #2ecc71, #27ae60);
+  border-radius: 6px;
+  transition: width 1s linear;
+}
+
+.timer-bar.warning {
+  background: linear-gradient(90deg, #f39c12, #e67e22);
+}
+
+.timer-bar.danger {
+  background: linear-gradient(90deg, #e74c3c, #c0392b);
+  animation: pulse-bar 0.5s ease-in-out infinite;
+}
+
+@keyframes pulse-bar {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ========================================
+   ゲーム盤面
+   ======================================== */
+.board-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 4px;
+  width: min(400px, calc(100vw - 40px), calc(100vh - 200px));
+  height: min(400px, calc(100vw - 40px), calc(100vh - 200px));
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  padding: 8px;
+}
+
+.cell {
+  position: relative;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.cell img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  transition: transform 0.15s ease;
+  pointer-events: none;
+}
+
+.cell.selected {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 3px #e74c3c;
+}
+
+.cell.hint {
+  animation: hint-pulse 0.8s ease-in-out infinite;
+}
+
+@keyframes hint-pulse {
+  0%, 100% { background: rgba(255, 255, 255, 0.6); }
+  50% { background: rgba(255, 215, 0, 0.6); }
+}
+
+/* ========================================
+   盤面アニメーション
+   ======================================== */
+.cell.swapping {
+  z-index: 10;
+}
+
+.cell.matched {
+  animation: match-pop 0.4s ease forwards;
+}
+
+@keyframes match-pop {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.8; }
+  100% { transform: scale(0); opacity: 0; }
+}
+
+.cell.dropping {
+  animation: drop-in 0.3s ease-out;
+}
+
+@keyframes drop-in {
+  0% { transform: translateY(-100%); opacity: 0; }
+  60% { transform: translateY(10%); opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.cell.invalid-swap {
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+/* スコアポップアップ */
+.score-popup {
+  position: absolute;
+  font-size: 24px;
+  font-weight: 800;
+  color: #e74c3c;
+  text-shadow: 1px 1px 0 white;
+  pointer-events: none;
+  animation: score-float 0.8s ease-out forwards;
+  z-index: 100;
+}
+
+@keyframes score-float {
+  0% { transform: translateY(0) scale(0.5); opacity: 1; }
+  100% { transform: translateY(-60px) scale(1.2); opacity: 0; }
+}
+
+/* コンボテキスト */
+.combo-text {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  font-size: 48px;
+  font-weight: 900;
+  color: #f39c12;
+  text-shadow: 3px 3px 0 #e67e22;
+  pointer-events: none;
+  animation: combo-pop 0.6s ease forwards;
+  z-index: 200;
+}
+
+@keyframes combo-pop {
+  0% { transform: translate(-50%, -50%) scale(0) rotate(-10deg); opacity: 1; }
+  50% { transform: translate(-50%, -50%) scale(1.3) rotate(5deg); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 0; }
+}
+
+/* ========================================
+   結果画面
+   ======================================== */
+.result-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.result-title {
+  font-size: 52px;
+  font-weight: 900;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.clear-title {
+  color: #f39c12;
+  text-shadow: 3px 3px 0 #e67e22, 6px 6px 0 rgba(0, 0, 0, 0.1);
+  animation: bounce 0.6s ease;
+}
+
+.gameover-title {
+  color: #95a5a6;
+  text-shadow: 3px 3px 0 #7f8c8d;
+}
+
+.allclear-title {
+  font-size: 44px;
+  color: #e74c3c;
+  text-shadow: 3px 3px 0 #c0392b, 6px 6px 0 rgba(0, 0, 0, 0.1);
+}
+
+.result-score {
+  margin-bottom: 20px;
+}
+
+.result-score-label {
+  display: block;
+  font-size: 20px;
+  font-weight: 600;
+  color: #8b6914;
+}
+
+.result-score-value {
+  display: block;
+  font-size: 56px;
+  font-weight: 900;
+  color: #e74c3c;
+}
+
+.result-stars {
+  font-size: 48px;
+  margin-bottom: 24px;
+  letter-spacing: 8px;
+}
+
+.result-target {
+  font-size: 20px;
+  color: #8b6914;
+  margin-bottom: 24px;
+}
+
+/* ========================================
+   パーティクル
+   ======================================== */
+.particle {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 150;
+}
+
+@keyframes particle-burst {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx), var(--dy)) scale(0);
+    opacity: 0;
+  }
+}
