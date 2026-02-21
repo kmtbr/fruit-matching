@@ -31,7 +31,7 @@ const Game = (() => {
   let isProcessing = false;
   let chainCount = 0;
   let hintTimer = null;
-  const HINT_DELAY = 5000; // 5秒操作がなければヒント表示
+  const HINT_DELAY = 3000; // 3秒操作がなければヒント表示
 
   // コールバック
   let onScoreUpdate = null;
