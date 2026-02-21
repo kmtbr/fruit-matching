@@ -134,13 +134,17 @@ const Game = (() => {
     if (onHint) onHint(null); // 現在のヒントをクリア
     hintTimer = setTimeout(function showHintTick() {
       if (isProcessing) {
-        // 処理中なら少し待ってリトライ
         hintTimer = setTimeout(showHintTick, 1000);
         return;
       }
       const hint = findHint();
-      if (hint && onHint) onHint(hint);
-      // 表示後も定期的に更新（別のペアに切り替わる可能性）
+      if (hint && onHint) {
+        // 一度消してから再表示（アニメーションをリスタート）
+        onHint(null);
+        setTimeout(() => {
+          if (onHint) onHint(hint);
+        }, 50);
+      }
       hintTimer = setTimeout(showHintTick, HINT_DELAY);
     }, HINT_DELAY);
   }
@@ -187,7 +191,8 @@ const Game = (() => {
 
     isProcessing = true;
     chainCount = 0;
-    resetHintTimer();
+    clearTimeout(hintTimer);
+    if (onHint) onHint(null);
 
     // 入れ替え実行
     swap(row1, col1, row2, col2);
@@ -309,6 +314,7 @@ const Game = (() => {
           isProcessing = false;
           checkClearCondition();
           checkForValidMoves();
+          resetHintTimer();
         }
       }, 350);
     }, 400);
